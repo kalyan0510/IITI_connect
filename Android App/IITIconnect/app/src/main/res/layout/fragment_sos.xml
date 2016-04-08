@@ -9,8 +9,6 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="SOS"
-        android:textSize="50dp"
-        android:textColor="#F00"
         android:id="@+id/textView3"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -18,33 +16,63 @@
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
         android:id="@+id/helptype"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="49dp">
+        android:layout_below="@+id/textView3"
+        android:layout_alignRight="@+id/helpLoc"
+        android:layout_alignEnd="@+id/helpLoc"
+        android:layout_marginTop="25dp">
+
+
+            <RadioButton
+               android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Help theres a fire"
+                android:id="@+id/help1"
+                android:layout_below="@+id/textView3"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:checked="false" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+
+                android:layout_height="match_parent"
+                android:text="Gas Leakage"
+                android:id="@+id/help2"
+                android:checked="false" />
         <RadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Help theres a fire"
-            android:id="@+id/help1"/>
+            android:text="Locked in elevator"
+            android:id="@+id/help3"
+            android:checked="false" />
         <RadioButton
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="help case 2"
-            android:id="@+id/help2"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chemical Leak"
+            android:id="@+id/radioButton"
+            android:layout_below="@+id/textView3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:checked="false" />
+
         <RadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="help case 3"
-            android:id="@+id/help3"/>
+            android:text="Rabid Animal"
+            android:id="@+id/radioButton2"
+            android:checked="false" />
+
+
     </RadioGroup>
 
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/helpLoc"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
+        android:layout_above="@+id/LocManEdt"
+        android:layout_toLeftOf="@+id/sendSOS"
+        android:layout_toStartOf="@+id/sendSOS">
         <RadioButton
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -63,32 +91,43 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/LocManEdt"
-        android:layout_below="@+id/helpLoc"/>
+        android:layout_above="@+id/sendSOS"
+        android:layout_alignRight="@+id/sendSOS"
+        android:layout_alignEnd="@+id/sendSOS" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/sendSOS"
-        android:layout_below="@+id/LocManEdt"
-        android:text="Ask for Help"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Current Location Detected"
-        android:id="@+id/textView6"
-        android:layout_below="@+id/sendSOS"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentRight="false"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Not Recognised"
-        android:id="@+id/curLoc"
-        android:layout_below="@+id/textView6"
-        android:layout_alignParentRight="false"
+        android:text="Ask for Help"
+        android:layout_above="@+id/curLoc"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Current Location:"
+        android:textSize="15sp"
+        android:id="@+id/textView6"
+        android:textColor="#444444"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="36dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Not Detected"
+        android:textColor="#555555"
+        android:id="@+id/curLoc"
+        android:textSize="14sp"
+        android:layout_alignBottom="@+id/textView6"
+        android:layout_toRightOf="@+id/textView6"
+        android:layout_toEndOf="@+id/textView6" />
+
+
 
 </RelativeLayout>

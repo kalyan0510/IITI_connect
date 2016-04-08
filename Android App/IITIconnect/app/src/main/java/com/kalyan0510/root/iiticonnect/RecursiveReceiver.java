@@ -55,7 +55,7 @@ public class RecursiveReceiver extends WakefulBroadcastReceiver {
     public static boolean canNotifyWarning=true;
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        //Toast.makeText(context, "recursive started", Toast.LENGTH_SHORT).show();
         contextx = context;
         //WakeLocker.acquire(context);
         if(!Utilities.isOncampusWifi(context)){

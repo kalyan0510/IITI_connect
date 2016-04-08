@@ -14,6 +14,8 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -23,6 +25,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Utilities {
     public static Context context;
@@ -30,31 +33,57 @@ public class Utilities {
 
     public class connection{
         public static final String NAMESPACE = "http://webService";
-        public static final String exs="/RESTfulProject/services/FeedService?wsdl";
+        public static final String exs="/IITIserver/services/FeedService?wsdl";
         public static final String SOAP_PREFIX = "/";
         public static  final String url= "http://";
-        public static final String x = "192.168.1.4";
+        public static final String x = "192.168.43.203";
         public class method_names{
             public static final String signup = "signup";
             public static final String login = "login";
             public static final String changedp ="changedp";
             public static final String getdp = "getdp";
+            public static final String getu = "getuser";
             public static final String fp="forgotpassword";
             public static final String cp="changepassword";
         }
 
     }
     public static boolean isOncampusWifi(Context c){
-        return getwifiname(c).equals(Wifiname);
+        return getwifiname(c).equals(Wifiname)||true;
     }
     public static User currentUser = new User();
+    public static ArrayList<RecentUserItem> recentusers= new ArrayList<>();
+    public static ArrayList<Integer> recentUserIds= new ArrayList<>();
+
     public class SharesPresfKeys{
         public static final String key = "xmotiv0510";
         public static final String regid = "reg_id";
         public  static final String name = "full_name";
-
+        public  static final String recents = "recents";
+        public static final String auth = "auth";
     }
+    public static String getauth(Context ctx){
+        SharedPreferences sp = ctx.getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE);
+        String s= sp.getString(SharesPresfKeys.auth, "");
+        return s;
+    }
+    public static int getuid(Context ctx){
+        SharedPreferences sp = ctx.getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE);
+        int s= sp.getInt(SharesPresfKeys.regid, -1);
+        return s;
+    }
+    public static Recents getrecents(Context xcontext){
+        SharedPreferences sp = xcontext.getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE);
+        String s= sp.getString(Utilities.SharesPresfKeys.recents, "");
+        Recents rc;
+        if(!s.equals("")){
+            rc = new Gson().fromJson(s,Recents.class);
 
+        }else {
+            rc = new Recents();
+        }
+        return rc;
+    }
     public static boolean isNetworkAvailable(Context ctx)
     {
         ConnectivityManager ctvMngr = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);

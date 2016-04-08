@@ -263,14 +263,20 @@ public class ProfileActivity extends AppCompatActivity {
          @Override
          protected String doInBackground(Uri... params) {
 
-             Bitmap bitmap = null;
+             Bitmap bitmap = null;Bitmap icon = null;
              try {
                  bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), params[0]);
-                 bitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, false);
+                 icon=bitmap = Bitmap.createScaledBitmap(bitmap, 200, 200, false);
                  ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                 ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
                  bitmap.compress(Bitmap.CompressFormat.PNG, 45, stream);
-                 final byte[] array = stream.toByteArray();
+                 icon.compress(Bitmap.CompressFormat.PNG, 10, stream2);
+                 byte[] array = stream.toByteArray();
+                 byte[] icon_array = stream2.toByteArray();
                  String Imagestr = Base64.encodeToString(array, Base64.DEFAULT);
+                 String icon_str = Base64.encodeToString(icon_array, Base64.DEFAULT);
+                 array=null;
+                 icon_array=null;
                  //converted to byte array and have to send it
                  SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                  SoapObject request = new SoapObject(Utilities.connection.NAMESPACE, Utilities.connection.method_names.changedp);
@@ -278,7 +284,7 @@ public class ProfileActivity extends AppCompatActivity {
                  int x = getApplicationContext().getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE).getInt("reg_id", 0);
                  request.addProperty("Reg_id", x);
                  request.addProperty("x", Imagestr);
-
+                 request.addProperty("y", icon_str);
                  envelope.bodyOut = request;
                  envelope.setOutputSoapObject(request);
                  HttpTransportSE transport = new HttpTransportSE(Utilities.connection.url + Utilities.connection.x + Utilities.connection.exs);

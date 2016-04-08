@@ -42,7 +42,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Change Password"
+        android:text="New Button"
         android:id="@+id/cpcp"
         android:layout_below="@+id/conp"
         android:layout_centerHorizontal="true" />
@@ -55,10 +55,7 @@
         android:id="@+id/cpdet"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:padding="1dp"
+        android:padding="15dp"
         android:layout_below="@+id/cpcp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

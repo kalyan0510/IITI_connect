@@ -12,49 +12,48 @@
 
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/fn"
         android:layout_alignParentTop="true"
         android:hint="First_name"
-        android:layout_alignParentStart="true"
         android:layout_marginTop="52dp" />
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ln"
         android:hint="last_name"
-        android:layout_below="@+id/fn"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/fn" />
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/un"
         android:hint="username"
-        android:layout_below="@+id/ln"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/ln" />
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/mailTv"
         android:hint="mail"
         android:layout_below="@+id/un"
-        android:layout_alignParentStart="true" />
+        android:layout_toLeftOf="@+id/textView"
+        android:layout_toStartOf="@+id/textView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:foregroundGravity="right"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:hint="\@iiti.ac.in"
         android:id="@+id/textView"
         android:gravity="center"
-        android:layout_alignEnd="@+id/radioButton"
-        android:layout_alignTop="@+id/mailTv"
         android:layout_alignBottom="@+id/mailTv"
-        android:layout_toEndOf="@+id/mailTv" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/mailTv" />
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -62,7 +61,6 @@
         android:text="I agree to terms and conditions"
         android:id="@+id/tc"
         android:layout_below="@+id/mailTv"
-        android:layout_alignParentStart="true"
         android:checked="false" />
 
     <Button
@@ -71,6 +69,16 @@
         android:text="submit"
         android:id="@+id/submit"
         android:layout_below="@+id/tc"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="SignUp"
+        android:id="@+id/textView7"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

@@ -2,6 +2,8 @@ package com.kalyan0510.root.iiticonnect;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,10 +23,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +43,14 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -78,8 +91,8 @@ public class HomeActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setCurrentItem(2 );
-
+        mViewPager.setCurrentItem(2);
+/*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +101,8 @@ public class HomeActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
 
             }
-        });
+        });*/
+
 
     }
 
@@ -148,6 +162,14 @@ public class HomeActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+            WebView map = (WebView) rootView.findViewById(R.id.webmap);
+            String html = "<html>\n" +
+                    "<head><title>Example KML link page using a geo-uri</title></head>\n" +
+                    "<body>\n" +
+                    "  <a href=\"geo:0,0?q=file:///sdcard/download/iiti.kml\">overlay.kml</a>\n" +
+                    "</body>\n" +
+                    "</html>";
+            map.loadData(html,"text/html", null);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText("HEY no ->" +getArguments().getInt(ARG_SECTION_NUMBER));
             return rootView;
@@ -186,11 +208,11 @@ public class HomeActivity extends AppCompatActivity {
             rootView.findViewById(R.id.sendAlertBut).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(( rootView.findViewById(typeRadioGroup.getCheckedRadioButtonId()))==null){
-                        Log.w("x","afakjh");
+                    if ((rootView.findViewById(typeRadioGroup.getCheckedRadioButtonId())) == null) {
+                        Log.w("x", "afakjh");
                         return;
                     }
-                    if(!Utilities.isOncampusWifi(context)){
+                    if (!Utilities.isOncampusWifi(context)) {
                         Toast.makeText(context, "not connected to CAMPUS WIFI", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -268,6 +290,140 @@ public class HomeActivity extends AppCompatActivity {
             return rootView;
         }
     }
+
+
+    public static class RecentChat extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
+        RecentUserAdapter adapter;
+        public RecentChat() {
+        }
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static RecentChat newInstance(int sectionNumber) {
+
+            RecentChat fragment = new RecentChat();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+        ListView recentlistview;ArrayList<RecentUserItem> recent_user_list;
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            final View rootView = inflater.inflate(R.layout.recent_chats, container, false);
+            recentlistview = (ListView) rootView.findViewById(R.id.recent_list_view);
+            SearchView searchView = (SearchView) rootView.findViewById(R.id.user_search);
+            recent_user_list = new ArrayList<RecentUserItem>();
+            adapter = new RecentUserAdapter(context,recent_user_list);
+            recentlistview.setAdapter(adapter);
+            recentlistview.setEnabled(false);
+            adapter.notifyDataSetChanged();
+            for(RecentUserItem r:Utilities.recentusers){
+                recent_user_list.add(new RecentUserItem(r.image, r.Name, r.str, r.time));
+                //recent_user_list.add(new RecentUserItem(null, "Akshaya", "here you go", "10:32"));
+            }
+            new AddusertoRecentListview().execute();
+            adapter.notifyDataSetChanged();
+            return rootView;
+        }
+
+        public class AddusertoRecentListview extends AsyncTask<String,String,String>{
+
+            @Override
+            protected String doInBackground(String... params) {
+                Log.w("see here","in the req class");
+                Recents rc = Utilities.getrecents(context);
+                for(int i:rc.recentids){
+                    String s = getusercontent(i);
+                   // if(s.charAt(0)!='{')
+                    Log.w("s",s);
+                    User u = new Gson().fromJson(s, User.class);
+                    String lmsg = getlastmes(i);
+                    Log.w("msg",lmsg);
+                    Message mg = new Gson().fromJson(lmsg,Message.class);
+                    if(mg.img!=null&&!mg.img.equals("")){
+                        byte[] array = Base64.decode(mg.img.getBytes(), Base64.DEFAULT);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(array, 0, array.length);
+                        recent_user_list.add(new RecentUserItem(bitmap, u.getFirst_name() + " " + u.getLast_name(), mg.message, mg.time));
+                    }
+//                    Toast.makeText(context, u.getFirst_name()+" "+u.getLast_name(), Toast.LENGTH_SHORT).show();
+                    recent_user_list.add(new RecentUserItem(null, u.getFirst_name() + " " + u.getLast_name(), mg.message, mg.time));
+                    Log.w("see here",  u.getFirst_name()+" "+u.getLast_name());
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                Toast.makeText(context, "Addduser :"+s, Toast.LENGTH_SHORT).show();
+                recentlistview.setEnabled(true);
+                adapter.notifyDataSetChanged();
+            }
+        }
+
+     static   String getusercontent(int x){
+            File f=new File(context.getFilesDir()+"/", x+"details.gk");
+            String line="";
+            try {
+                FileInputStream fis = new FileInputStream(f);
+                BufferedReader r = new BufferedReader(new InputStreamReader(fis));
+                String str= r.readLine();
+                while(str!=null){
+                    line+=str;
+                    str  = r.readLine();
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return line.replaceAll("\\\"","\"");
+
+
+          /*  FileInputStream fos = null;
+            try {
+                fos = context.openFileInput(x+"details.gk");
+                fos.read();
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+            return 0;*/
+        }
+        String getlastmes(int x){
+            File f=new File(context.getFilesDir()+"/", x+"last.gk");
+            String line="";
+            try {
+                FileInputStream fis = new FileInputStream(f);
+                BufferedReader r = new BufferedReader(new InputStreamReader(fis));
+                String str= r.readLine();
+                while(str!=null){
+                    line+=str;
+                    str  = r.readLine();
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            line.replaceAll("\\\"","\"");
+            return line;
+        }
+
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -287,14 +443,14 @@ public class HomeActivity extends AppCompatActivity {
             else if(position==1){
                 return SOSFragment.newInstance(2);
             }else
-                return PlaceholderFragment.newInstance(position+1);
+                return RecentChat.newInstance(position+1);
 
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 5;
+            return 4;
         }
 
         @Override
@@ -308,8 +464,7 @@ public class HomeActivity extends AppCompatActivity {
                     return "Chat";
                 case 3:
                     return "Schedule";
-                case 4:
-                    return "map";
+
             }
             return null;
         }

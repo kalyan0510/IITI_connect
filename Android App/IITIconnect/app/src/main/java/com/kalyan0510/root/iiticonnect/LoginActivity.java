@@ -1,9 +1,12 @@
 package com.kalyan0510.root.iiticonnect;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,11 +23,13 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 public class LoginActivity extends AppCompatActivity {
     EditText un,pa;
     TextView det;
     Button fp,submit;
+    String passwd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "please do not enter invalid chars", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                passwd=p;
                 login(u, p);
             }
         });
@@ -188,7 +194,30 @@ public class LoginActivity extends AppCompatActivity {
                     SharedPreferences sp = getApplicationContext().getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putInt(Utilities.SharesPresfKeys.regid,Integer.parseInt(s));
+                    editor.putString(Utilities.SharesPresfKeys.auth, passwd);
                     editor.commit();
+
+
+                    Context c = getApplicationContext();
+                    Calendar cal = Calendar.getInstance();
+                    cal.add(Calendar.SECOND, 1);
+                    Intent intentm = new Intent(c, MessageReceiver.class);
+                    PendingIntent pendingIntentm =
+                            PendingIntent.getBroadcast(c,
+                                    1, intentm, PendingIntent.FLAG_ONE_SHOT);
+                    AlarmManager alarmManagerm =
+                            (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                        alarmManagerm.set(AlarmManager.RTC_WAKEUP,
+                                cal.getTimeInMillis(), pendingIntentm);
+                        Toast.makeText(c,
+                                "Broadcast Started",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                       // Toast.makeText(c, "initialising mgbr", Toast.LENGTH_SHORT).show();
+                        alarmManagerm.setExact(AlarmManager.RTC_WAKEUP,
+                                cal.getTimeInMillis(), pendingIntentm);
+                    }
                     startActivity(new Intent(getApplicationContext(),HomeActivity.class));
                 }
 
