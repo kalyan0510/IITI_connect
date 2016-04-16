@@ -1,5 +1,6 @@
 package com.kalyan0510.root.iiticonnect;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,20 +35,22 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity{
     Uri selectedImageUri;
     String selectedImagePath,status;
     ImageView iv;
-    TextView un , fn , ln ,Ml,St;
+    TextView un , fn ,Ml,St;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+       // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        ((ImageView)findViewById(R.id.header_imageview)).setScaleType(ImageView.ScaleType.FIT_XY);
         iv = ((ImageView)findViewById(R.id.imgdp));
         un= (TextView)findViewById(R.id.usrnameTv);
         fn = (TextView)findViewById(R.id.fnameTv);
-        ln = (TextView)findViewById(R.id.lnameTv);
+        //ln = (TextView)findViewById(R.id.lnameTv);
         Ml =(TextView)findViewById(R.id.mailTv);
         St = (TextView)findViewById(R.id.statusTv);
         Ml.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
-        findViewById(R.id.editbutton).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.imgdp).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!Utilities.isOncampusWifi(getApplicationContext())){
@@ -98,7 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         getdp(getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE).getInt("reg_id", 0));
         new getusertask().execute(getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE).getInt("reg_id", 0));
-        findViewById(R.id.alarmset).setOnClickListener(new View.OnClickListener() {
+        /*findViewById(R.id.alarmset).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
@@ -121,7 +125,7 @@ public class ProfileActivity extends AppCompatActivity {
                             cal.getTimeInMillis(), pendingIntent);
                 }
             }
-        });
+        });*/
     }
 
     @Override
@@ -203,6 +207,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
             byte[] array = Base64.decode(s.getBytes(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(array, 0, array.length);
+            if(bitmap!=null)
             iv.setImageBitmap(bitmap);
             super.onPostExecute(s);
         }
@@ -210,7 +215,7 @@ public class ProfileActivity extends AppCompatActivity {
     /////////////////////////////GET USER OBJECT///////////////////////////////////
 
      class getusertask extends AsyncTask<Integer, String,String>{
-        String result;
+        String result="*";
         protected String doInBackground(Integer... params) {
             try {
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -222,10 +227,10 @@ public class ProfileActivity extends AppCompatActivity {
                     transport.call(Utilities.connection.NAMESPACE + Utilities.connection.SOAP_PREFIX +"getuser", envelope);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    return e.getMessage();
+                    return "*";
                 } catch (XmlPullParserException e) {
                     e.printStackTrace();
-                    return e.getMessage();
+                    return "*";
                 }
                 result=envelope.getResponse().toString();
                 if (envelope.bodyIn != null) {
@@ -234,7 +239,7 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                result = e.getMessage();
+                result = "*";
             }
             return result;
         }
@@ -242,15 +247,19 @@ public class ProfileActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String  s) {
+            if(s.equals("*"))
+                return;
             User u = new Gson().fromJson(s,User.class);
-            un.setText(u.getUsername());
-            fn.setText(u.getFirst_name());
-            ln.setText(u.getLast_name());
+            un.setText("username: "+u.getUsername());
+            fn.setText(u.getFirst_name()+' '+u.getLast_name());
+            //ln.setText(u.getLast_name());
             St.setText(u.getStatus());
             Ml.setText(u.getMail());
-            Utilities.currentUser= u;
+            //Utilities.currentUser= u;
+
             SharedPreferences sp =getSharedPreferences(Utilities.SharesPresfKeys.key,Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
+            editor.putString(Utilities.SharesPresfKeys.user, new Gson().toJson(u));
             editor.putString("full_name",u.getFirst_name()+" "+u.getLast_name());
             editor.commit();
         }

@@ -1,9 +1,12 @@
 package com.kalyan0510.root.iiticonnect;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +27,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -35,6 +41,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.kobjects.util.Util;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -48,9 +55,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -77,6 +86,7 @@ public class HomeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
+
         setContentView(R.layout.activity_home);
         reg_id = getSharedPreferences(Utilities.SharesPresfKeys.key,Context.MODE_PRIVATE).
                 getInt(Utilities.SharesPresfKeys.regid,0);
@@ -92,16 +102,14 @@ public class HomeActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(2);
-/*
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
 
             }
-        });*/
+        });
 
 
     }
@@ -122,7 +130,11 @@ public class HomeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            clearApplicationData();
+            //startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            finish();
+            System.exit(0);
             return true;
         }
         else if(id==R.id.action_profile){
@@ -133,6 +145,33 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void clearApplicationData() {
+        File cache = getCacheDir();
+        File appDir = new File(cache.getParent());
+        if (appDir.exists()) {
+            String[] children = appDir.list();
+            for (String s : children) {
+                if (!s.equals("lib")) {
+                    deleteDir(new File(appDir, s));
+                    Log.i("TAG", "**************** File /data/data/APP_PACKAGE/" + s + " DELETED *******************");
+                }
+            }
+        }
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        return dir.delete();
+    }
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -293,10 +332,15 @@ public class HomeActivity extends AppCompatActivity {
 
 
     public static class RecentChat extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
+        AutoCompleteTextView atv;
+        String[] strlist=new String[500];
+        int[] intlist=new int[500];
+/*
+        String[] strlist={"","kal","yan"};
+        int[] intlist={1,2,3};
+*/
+
+
         private static final String ARG_SECTION_NUMBER = "section_number";
         RecentUserAdapter adapter;
         public RecentChat() {
@@ -314,57 +358,226 @@ public class HomeActivity extends AppCompatActivity {
             fragment.setArguments(args);
             return fragment;
         }
+         void setstrlist(){
+            int i=0;
+            String s=getuserlist();
+            if(s==null)
+                return;
+            if(s.equals(""))
+                return;
+            try{
+            Userlist ul = new Gson().fromJson(s,Userlist.class);
+                for(User u:ul.list){
+                    strlist[i]=u.getFirst_name()+" "+u.getLast_name()+": "+u.getMail();
+                     intlist[i]=u.getReg_id();
+                    //Toast.makeText(context, intlist[i]+" "+strlist[i], Toast.LENGTH_SHORT).show();
+                     i++;
+                }
+                while(i<=499){
+                    strlist[i]=" ";
+                    i++;
+                }
+                if(adapt!=null)
+                    adapt.notifyDataSetChanged();
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        static   String getuserlist() {
+            File f = new File(context.getFilesDir() + "/","users.gk");
+            if (!f.exists()) {
+                Log.w("e", "f not exists");
+                return null;
+            }
+
+            String line = "";
+            try {
+                FileInputStream fis = new FileInputStream(f);
+                BufferedReader r = new BufferedReader(new InputStreamReader(fis));
+                String str = r.readLine();
+                while (str != null) {
+                    line += str;
+                    str = r.readLine();
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return line;
+        }
+        ArrayAdapter adapt;
+        Button toputmAct;
+        BroadcastReceiver receiver;
         ListView recentlistview;ArrayList<RecentUserItem> recent_user_list;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.recent_chats, container, false);
             recentlistview = (ListView) rootView.findViewById(R.id.recent_list_view);
-            SearchView searchView = (SearchView) rootView.findViewById(R.id.user_search);
+            atv = (AutoCompleteTextView)rootView.findViewById(R.id.user_search);
+            new getuserforsearch().execute();
+            setstrlist();
+            //Toast.makeText(context, "Working or nt--"+strlist[0], Toast.LENGTH_SHORT).show();
+            adapt = new ArrayAdapter(context,android.R.layout.simple_spinner_dropdown_item,strlist);
+            atv.setAdapter(adapt);
+            atv.setTextColor(Color.BLACK);
+            atv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(context, ChatActivity.class);
+                    String name = parent.getItemAtPosition(position).toString();
+                    //Toast.makeText(context, intlist[Arrays.asList(strlist).indexOf(name)]+"" + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Name", name);
+                    bundle.putInt("reg_id", intlist[Arrays.asList(strlist).indexOf(name)]);
+                    intent.putExtras(bundle);
+
+                    startActivity(intent);
+                }
+            });
             recent_user_list = new ArrayList<RecentUserItem>();
             adapter = new RecentUserAdapter(context,recent_user_list);
+
             recentlistview.setAdapter(adapter);
             recentlistview.setEnabled(false);
             adapter.notifyDataSetChanged();
-            for(RecentUserItem r:Utilities.recentusers){
-                recent_user_list.add(new RecentUserItem(r.image, r.Name, r.str, r.time));
-                //recent_user_list.add(new RecentUserItem(null, "Akshaya", "here you go", "10:32"));
-            }
             new AddusertoRecentListview().execute();
             adapter.notifyDataSetChanged();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("com.kalyan.messagereceived");
+            receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, final Intent intent) {
+
+
+                    new Runnable(){
+
+                        @Override
+                        public void run() {
+                            new AddusertoRecentListview().execute();
+                        }
+                    }.run();
+                }
+            };
+            context.registerReceiver(receiver, filter);
             return rootView;
         }
 
-        public class AddusertoRecentListview extends AsyncTask<String,String,String>{
-
+        public class getuserforsearch extends AsyncTask<Void,String,String>{
             @Override
-            protected String doInBackground(String... params) {
-                Log.w("see here","in the req class");
-                Recents rc = Utilities.getrecents(context);
-                for(int i:rc.recentids){
-                    String s = getusercontent(i);
-                   // if(s.charAt(0)!='{')
-                    Log.w("s",s);
-                    User u = new Gson().fromJson(s, User.class);
-                    String lmsg = getlastmes(i);
-                    Log.w("msg",lmsg);
-                    Message mg = new Gson().fromJson(lmsg,Message.class);
-                    if(mg.img!=null&&!mg.img.equals("")){
-                        byte[] array = Base64.decode(mg.img.getBytes(), Base64.DEFAULT);
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(array, 0, array.length);
-                        recent_user_list.add(new RecentUserItem(bitmap, u.getFirst_name() + " " + u.getLast_name(), mg.message, mg.time));
+            protected String doInBackground(Void... params) {
+                String result="*";
+                try {
+                    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                    SoapObject request = new SoapObject(Utilities.connection.NAMESPACE,"getusersforsearch");
+                    envelope.bodyOut = request;
+                    HttpTransportSE transport = new HttpTransportSE(Utilities.connection.url+Utilities.connection.x+Utilities.connection.exs);
+                    try {
+                        transport.call(Utilities.connection.NAMESPACE + Utilities.connection.SOAP_PREFIX +"getusersforsearch", envelope);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return "*1";
+                    } catch (XmlPullParserException e) {
+                        e.printStackTrace();
+                        return "*2";
                     }
-//                    Toast.makeText(context, u.getFirst_name()+" "+u.getLast_name(), Toast.LENGTH_SHORT).show();
-                    recent_user_list.add(new RecentUserItem(null, u.getFirst_name() + " " + u.getLast_name(), mg.message, mg.time));
-                    Log.w("see here",  u.getFirst_name()+" "+u.getLast_name());
+                    result=envelope.getResponse().toString();
+                    if (envelope.bodyIn != null) {
+                        SoapPrimitive resultSOAP = (SoapPrimitive) ((SoapObject) envelope.bodyIn).getProperty(0);
+                        result=resultSOAP.toString();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    result = "*3";
                 }
-                return null;
+                return result;
+
             }
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                Toast.makeText(context, "Addduser :"+s, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "/////////////////////////"+s, Toast.LENGTH_SHORT).show();
+                if(s.equals("*")) {
+                    return;
+                }
+
+                //Log.w("dreams",s);
+
+                putuserlisttofile(s);
+                setstrlist();
+                adapt.notifyDataSetChanged();
+            }
+        }
+        static int putuserlisttofile(String mg){
+            FileWriter f;
+            File file = new File(context.getFilesDir()+"/", "users.gk");
+            if(!file.exists()){
+                try {
+                    file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                context.getExternalFilesDir("dir");
+                f = new FileWriter(context.getFilesDir()+"/"+"users.gk",false);
+                f.write(mg);
+                f.flush();
+                f.close();
+                return 1;
+            }
+            catch (Exception e){
+                e.printStackTrace();
+                return 0;
+            }
+
+
+        }
+        public class AddusertoRecentListview extends AsyncTask<String,String,String>{
+            String res_error;
+            @Override
+            protected String doInBackground(String... params) {
+                User u=null;
+                Recents rc = Utilities.getrecents(context);
+                int i;
+                recent_user_list.clear();
+                for(int x=rc.recentids.size()-1;x>=0;x--){
+                    i=rc.recentids.get(x);
+                    if(Utilities.isonofflineusers(context,i)){
+
+                        String s = getusercontent(i);
+                        // if(s.charAt(0)!='{')
+                        Log.w("sys",s);
+                        u = new Gson().fromJson(s, User.class);
+
+                    }else
+                   res_error+="User NOt Available offline";
+                    String lmsg = getlastmes(i);
+                    //Log.w("msg",lmsg);
+                    Message mg = new Gson().fromJson(lmsg,Message.class);
+                    if(u!=null&&u.getPic()!=null&&!(u.getPic()+"").equals("")){
+                        byte[] array = Base64.decode(u.getPic().getBytes(), Base64.DEFAULT);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(array, 0, array.length);
+                        recent_user_list.add(new RecentUserItem(bitmap, mg.from_name, mg.message, mg.time,mg.from));
+                    }else {
+                        if(u==null)
+                        res_error+="User NULL";
+                        else
+                            res_error+="User Pic Null";
+                        recent_user_list.add(new RecentUserItem(null, "" + mg.from_name, mg.message, mg.time,mg.from));
+                        //Log.w("see here",  u.getFirst_name()+" "+u.getLast_name());
+                    }
+                }
+                return res_error;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                //Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
                 recentlistview.setEnabled(true);
                 adapter.notifyDataSetChanged();
             }
@@ -372,6 +585,11 @@ public class HomeActivity extends AppCompatActivity {
 
      static   String getusercontent(int x){
             File f=new File(context.getFilesDir()+"/", x+"details.gk");
+            if(!f.exists()){
+                Log.w("e","f not exists");
+                return  null;
+            }
+
             String line="";
             try {
                 FileInputStream fis = new FileInputStream(f);
@@ -386,7 +604,7 @@ public class HomeActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return line.replaceAll("\\\"","\"");
+            return line;///////////////////////////////////.replaceAll("\\\"","\"");
 
 
           /*  FileInputStream fos = null;
@@ -450,7 +668,7 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 4;
+            return 3;
         }
 
         @Override

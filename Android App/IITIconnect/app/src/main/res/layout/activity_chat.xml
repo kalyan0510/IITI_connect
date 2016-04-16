@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:windowSoftInputMode="adjustPan"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="65dp"
+        android:padding="5dp"
+        android:id="@+id/linear2"
+        android:shadowColor="#4dc247"
+        android:background="#005A4E"
+
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="0dp"
+            android:background="@mipmap/back"
+            android:layout_weight="0.1"
+            android:onClick="goback"
+            android:layout_gravity="center"
+            android:layout_height="40dp" />
+        <com.kalyan0510.root.iiticonnect.RoundedImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/usericon"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/gkalyan"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_weight="0.8"
+                android:id="@+id/oppname"
+                android:padding="5dp"
+                android:textStyle="bold"
+                android:textColor="#ffffff"
+                android:text="My Name"
+                android:textSize="16sp"
+                android:layout_height="0dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:textColor="#cccccc"
+                android:textSize="15sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="status"
+                android:id="@+id/opp_status"
+                android:layout_weight="0.8" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:windowSoftInputMode="adjustPan"
+
+        android:layout_weight="10">
+
+        <FrameLayout
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_weight="11">
+
+            <ListView
+                android:layout_gravity="top"
+                android:id="@android:id/list"
+                android:transcriptMode="alwaysScroll"
+                android:stackFromBottom="true"
+                android:background="@mipmap/background"
+                android:drawSelectorOnTop="false"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:isScrollContainer="false"
+                android:footerDividersEnabled="true">
+
+
+            </ListView>
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:background="#fcfcfc"
+                android:id="@+id/linearLayout">
+
+                <EditText
+                    android:id="@+id/enter_message"
+                    android:layout_width="0dp"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentBottom="true"
+                    android:inputType="textMultiLine"
+                    android:windowSoftInputMode="adjustPan"
+                    android:layout_weight="1"
+                    android:hint="hint here" />
+
+                <ImageView
+                    android:id="@+id/send_button"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.2"
+                    android:shadowColor="@color/colorPrimary"
+                    android:layout_height="fill_parent"
+                    android:background="@mipmap/send"
+                    android:onClick="sendMessage"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

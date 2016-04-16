@@ -256,7 +256,7 @@ public class RecursiveReceiver extends WakefulBroadcastReceiver {
         }
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c)
-                .setSmallIcon(R.mipmap.editw)
+                .setSmallIcon(R.mipmap.notify)
                 .setContentTitle("Warning from "+user)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri);

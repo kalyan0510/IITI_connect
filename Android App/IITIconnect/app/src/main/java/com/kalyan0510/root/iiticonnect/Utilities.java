@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,6 +27,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Utilities {
     public static Context context;
@@ -36,7 +38,7 @@ public class Utilities {
         public static final String exs="/IITIserver/services/FeedService?wsdl";
         public static final String SOAP_PREFIX = "/";
         public static  final String url= "http://";
-        public static final String x = "192.168.43.203";
+        public static final String x = "192.168.1.2";
         public class method_names{
             public static final String signup = "signup";
             public static final String login = "login";
@@ -51,16 +53,24 @@ public class Utilities {
     public static boolean isOncampusWifi(Context c){
         return getwifiname(c).equals(Wifiname)||true;
     }
-    public static User currentUser = new User();
-    public static ArrayList<RecentUserItem> recentusers= new ArrayList<>();
+    //public static User currentUser = new User();
+   // public static ArrayList<RecentUserItem> recentusers= new ArrayList<>();
     public static ArrayList<Integer> recentUserIds= new ArrayList<>();
+    public static User getUser(Context ctx){
+        SharedPreferences sp = ctx.getSharedPreferences(SharesPresfKeys.key, Context.MODE_PRIVATE);
+        User u = new Gson().fromJson(sp.getString(SharesPresfKeys.user, ""),User.class);
+        return u;
 
+    }
     public class SharesPresfKeys{
         public static final String key = "xmotiv0510";
         public static final String regid = "reg_id";
         public  static final String name = "full_name";
         public  static final String recents = "recents";
+        public  static final String user = "jsonUser";
         public static final String auth = "auth";
+
+        public static final String offlineusers = "loadedusers";
     }
     public static String getauth(Context ctx){
         SharedPreferences sp = ctx.getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE);
@@ -71,6 +81,23 @@ public class Utilities {
         SharedPreferences sp = ctx.getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE);
         int s= sp.getInt(SharesPresfKeys.regid, -1);
         return s;
+    }
+    public static boolean addofflineuser(Context ctx,int u){
+        SharedPreferences sp = ctx.getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE);
+        SharedPreferences.Editor e = sp.edit();
+
+        Gson gson = new Gson();
+        Recents r= gson.fromJson(sp.getString(SharesPresfKeys.offlineusers, gson.toJson(new Recents())), Recents.class);
+        r.recentids.add(u);
+        e.putString(SharesPresfKeys.offlineusers,gson.toJson(r));
+        e.commit();
+        return isonofflineusers(ctx,u);
+    }
+    public static boolean isonofflineusers(Context c,int u){
+        SharedPreferences sp = c.getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        Log.w("ofllineusers",sp.getString(SharesPresfKeys.offlineusers, gson.toJson(new Recents())));
+        return gson.fromJson(sp.getString(SharesPresfKeys.offlineusers, gson.toJson(new Recents())), Recents.class).recentids.contains(u);
     }
     public static Recents getrecents(Context xcontext){
         SharedPreferences sp = xcontext.getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE);

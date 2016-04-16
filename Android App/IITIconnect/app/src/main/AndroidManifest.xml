@@ -9,16 +9,25 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
+        
         android:allowBackup="true"
         android:icon="@mipmap/giffy"
-        android:name="com.orm.SugarApp"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="DATABASE" android:value="sugar_example.db" />
-        <meta-data android:name="VERSION" android:value="2" />
-        <meta-data android:name="QUERY_LOG" android:value="true" />
-        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.example" />
+        <meta-data
+            android:name="DATABASE"
+            android:value="sugar_example.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="2" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.example" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -39,13 +48,28 @@
         <receiver android:name=".MessageReceiver" />
         <receiver android:name=".WifiConnectionReceiver">
             <intent-filter android:priority="100">
-                <action android:name="android.net.wifi.STATE_CHANGE"/>
+                <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
         </receiver>
+        <!--
+        <receiver android:name=".ChatActivity$ListenMessage">
+            <intent-filter android:priority="101">
+                <action android:name="c"/>
+            </intent-filter>
+        </receiver>
+        -->
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".PutMessage" />
+        <activity android:name=".TestActivity" />
+        <activity
+            android:name=".ChatActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".OthersProfileActivity"></activity>
     </application>
 
 </manifest>

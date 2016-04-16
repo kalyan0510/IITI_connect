@@ -3,16 +3,21 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <SearchView
+    <AutoCompleteTextView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:id="@+id/user_search"
         android:background="#cccccc"
-        android:layout_gravity="center_horizontal" />
+        android:textColor="@android:color/primary_text_light"
+        android:hint="find friends by name or mail"
+        android:popupBackground="#555555"
+        android:layout_gravity="center_horizontal" >
+        </AutoCompleteTextView>
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/recent_list_view"
         android:layout_gravity="center_horizontal" />
+
 </LinearLayout>

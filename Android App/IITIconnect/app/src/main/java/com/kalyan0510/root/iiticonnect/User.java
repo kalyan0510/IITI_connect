@@ -1,13 +1,11 @@
 package com.kalyan0510.root.iiticonnect;
 
 
-import com.orm.SugarRecord;
-
 /**
  * Created by root on 20/2/16.
  */
 
-public class User extends SugarRecord{
+public class User {
     private int reg_id;
     private String first_name;
     private String last_name;

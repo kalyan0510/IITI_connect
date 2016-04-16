@@ -22,6 +22,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
@@ -39,8 +40,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -120,37 +124,27 @@ public class MessageReceiver extends WakefulBroadcastReceiver {
             if(s.equals("")){
                 return;
             }
-            Log.w("x", " "+ s+"\n-------------------------------------------");
+          //  Log.w("x", " "+ s+"\n-------------------------------------------");
+            try {
+                s=URLDecoder.decode(s,"UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             if(s.charAt(0)=='{')
-            {Messagelist ml = new Gson().fromJson(s, Messagelist.class);
+            {
+                Messagelist ml = new Gson().fromJson(s, Messagelist.class);
             for(Message mg:ml.messagelist){
                 putMessagetofile(mg);
             }}
         }
     }
-    String getmes(int x){
-        File f=new File(contextx.getFilesDir()+"/", x+".gk");
-        String line="";
-        try {
-            FileInputStream fis = new FileInputStream(f);
-            BufferedReader r = new BufferedReader(new InputStreamReader(fis));
-            String str= r.readLine();
-            while(str!=null){
-                line+=str;
-                str  = r.readLine();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return line;
-    }
-    int putMessagetofile(Message mg){
 
-        putrecent(mg);
+    int putMessagetofile(Message mg){
+        mg.status=1;
+
         File filey = new File(contextx.getFilesDir()+"/", mg.from+"details.gk");
         if(!filey.exists()){
+            Toast.makeText(contextx, "User details storing called", Toast.LENGTH_SHORT).show();
             new putuserdetailsinfile().execute(mg.from);
         }
         putLastMessagetofile(mg);
@@ -167,7 +161,7 @@ public class MessageReceiver extends WakefulBroadcastReceiver {
             contextx.getExternalFilesDir("dir");
             f = new FileWriter(contextx.getFilesDir()+"/"+mg.from+".gk",true);
             //Toast.makeText(contextx, "puts: "+new Gson().toJson(mg), Toast.LENGTH_SHORT).show();
-            f.write(new Gson().toJson(mg));
+            f.write(new Gson().toJson(mg)+",");
             f.flush();
 
             f.close();
@@ -184,14 +178,20 @@ public class MessageReceiver extends WakefulBroadcastReceiver {
 
     }
     void putnotify(Message mg){
-        int d= mg.from;
-        String s = HomeActivity.RecentChat.getusercontent(d);
-        User u = new Gson().fromJson(s, User.class);
-        setcall(contextx,mg.time,mg.message,u.getFirst_name()+" "+u.getLast_name(),(int)Math.random()*100%100);
+        Intent i = new Intent();
+        i.setAction("com.kalyan.messagereceived");
+        Bundle bundle = new Bundle();
+        bundle.putInt("from_id",mg.from );
+        bundle.putString("from_name",mg.from_name);
+        bundle.putString("messg",mg.message);
+        bundle.putString("time",mg.time);
+        i.putExtras(bundle);
+        contextx.sendBroadcast(i);
+        setcall(contextx, mg.time, mg.message, mg.from_name, (int) (Math.random() * 100));
     }
     int putLastMessagetofile(Message mg){
         putnotify(mg);
-        putrecent(mg);
+        //putrecent(mg);
         FileWriter f;
         File file = new File(contextx.getFilesDir()+"/", mg.from+"last.gk");
         if(!file.exists()){
@@ -211,7 +211,7 @@ public class MessageReceiver extends WakefulBroadcastReceiver {
             f.close();
             //Toast.makeText(MainActivity.this, getApplicationContext().getFilesDir()+"", Toast.LENGTH_SHORT).show();
 
-
+            putrecent(mg);
 
             return 1;
         }
@@ -226,16 +226,14 @@ public class MessageReceiver extends WakefulBroadcastReceiver {
     }
     public void setcall(Context c,String descr,String type,String user,int id) {
         // Toast.makeText(this,"call", Toast.LENGTH_SHORT).show();
-        if(!canNotifyWarning){
-            return;
-        }
+
         if(!Utilities.isOncampusWifi(c)){
             //Toast.makeText(context, "not connected to CAMPUS WIFI", Toast.LENGTH_SHORT).show();
             return;
         }
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c)
-                .setSmallIcon(R.mipmap.editw)
+                .setSmallIcon(R.mipmap.notify)
                 .setContentTitle("Message from "+user)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri);
@@ -252,26 +250,15 @@ public class MessageReceiver extends WakefulBroadcastReceiver {
                 (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
         int NOTIFICATION_ID = 100+id;
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                canNotifyWarning = false;
-                try {
-                    Thread.sleep(1000*50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                canNotifyWarning = true;
-            }
-        }).start();
     }
 
 
     public class putuserdetailsinfile extends AsyncTask<Integer,String ,String>{
-        String result;
+
         int id;
         @Override
         protected String doInBackground(Integer... params) {
+            String result;
             id = params[0];
             try {
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -304,6 +291,10 @@ public class MessageReceiver extends WakefulBroadcastReceiver {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             //User u  = new Gson().fromJson(s,User.class);
+            //Toast.makeText(contextx, ""+s, Toast.LENGTH_SHORT).show();
+            Boolean t = Utilities.addofflineuser(contextx,id);
+            Toast.makeText(contextx, "addofflinee "+t, Toast.LENGTH_SHORT).show();
+            Log.w("addolf",t+"");
             FileWriter f;
             File file = new File(contextx.getFilesDir()+"/", id+"details.gk");
             if(!file.exists()){
@@ -316,16 +307,22 @@ public class MessageReceiver extends WakefulBroadcastReceiver {
             }
             try {
                 contextx.getExternalFilesDir("dir");
+                f = new FileWriter(contextx.getFilesDir()+"/"+id+"details.gk",false);
+                Toast.makeText(contextx, "main open", Toast.LENGTH_SHORT).show();
+                f.write(s);
+                f.flush();
 
-                FileOutputStream fos = contextx.openFileOutput(id+"details.gk", Context.MODE_PRIVATE);
-                fos.write(s.getBytes());
+                f.close();
+                Toast.makeText(contextx, "user saved success", Toast.LENGTH_SHORT).show();
 
-                fos.close();
+
+
 
             }
             catch (Exception e){
                 e.printStackTrace();
-                Toast.makeText(contextx, "Problem in saving user", Toast.LENGTH_SHORT).show();
+                Toast.makeText(contextx, "user saved FAILED", Toast.LENGTH_SHORT).show();
+
 
 
             }

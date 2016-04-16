@@ -66,20 +66,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         context  = getApplicationContext();
         setContentView(R.layout.activity_main);
-        /*putMessagetofile(new Message(89, "hello kalyan", "str", null, 2));
-        putMessagetofile(new Message(83, "hello kalyan", "str", null, 2));
-        putMessagetofile(new Message(84, "hello kalyan", "str", null, 2));
-        Toast.makeText(MainActivity.this, "gets: "+getmes(89), Toast.LENGTH_SHORT).show();
-        Toast.makeText(MainActivity.this, "gets: "+getmes(83), Toast.LENGTH_SHORT).show();
-        Toast.makeText(MainActivity.this, "gets: "+getmes(8), Toast.LENGTH_SHORT).show();
-        *///if(Utilities.isOncampusWifi(getApplicationContext()));
-        //new loadrecentUsers().execute();
-        //Utilities.recentusers.add(new RecentUserItem(null,nam,"saascccc","00:00"));
-        String html = "<html>" +
-                "<body>" +
-                "<img src='gifyy.gif'" +
-                "</body>" +
-                "</html>";
+        //new HomeActivity.RecentChat.getuserforsearch().execute(this);
         WebView wv = (WebView)findViewById(R.id.logo);
         wv.loadUrl("file:///android_asset/htmll.html");
 
@@ -115,7 +102,7 @@ public class MainActivity extends Activity {
                                 "Broadcast Started",
                                 Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(MainActivity.this, "initialising mgbr", Toast.LENGTH_SHORT).show();
+                   //     Toast.makeText(MainActivity.this, "initialising mgbr", Toast.LENGTH_SHORT).show();
                         alarmManagerm.setExact(AlarmManager.RTC_WAKEUP,
                                 cal.getTimeInMillis(), pendingIntentm);
                     }
@@ -377,56 +364,6 @@ PopupWindow pw;
     }
 
 
-class loadrecentUsers extends AsyncTask<Void,String ,String> {
-
-    String result;
-
-    @Override
-    protected String doInBackground(Void... params) {
-
-        Utilities.recentUserIds.add(9);
-        Utilities.recentUserIds.add(6);
-        for (int reg_num : Utilities.recentUserIds) {
-            try {
-                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                SoapObject request = new SoapObject(Utilities.connection.NAMESPACE, Utilities.connection.method_names.getu);
-                request.addProperty("reg_id", reg_num);
-                envelope.bodyOut = request;
-                HttpTransportSE transport = new HttpTransportSE(Utilities.connection.url + Utilities.connection.x + Utilities.connection.exs);
-                try {
-                    transport.call(Utilities.connection.NAMESPACE + Utilities.connection.SOAP_PREFIX + Utilities.connection.method_names.getu, envelope);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return e.getMessage();
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                    return e.getMessage();
-                }
-                result = envelope.getResponse().toString();
-                if (envelope.bodyIn != null) {
-                    SoapPrimitive resultSOAP = (SoapPrimitive) ((SoapObject) envelope.bodyIn).getProperty(0);
-                    result = resultSOAP.toString();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                result = e.getMessage();
-            }
-            User u = new Gson().fromJson(result, User.class);
-            u.save();
-            if(u.getPic()!=null)
-            {
-                byte[] array = Base64.decode(u.getPic().getBytes(), Base64.DEFAULT);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(array, 0, array.length);
-                RecentUserItem rui = new RecentUserItem(bitmap,u.getFirst_name()+' '+u.getLast_name(),"","10:00");
-                rui.save();
-                Utilities.recentusers.add(rui);
-            }
-            else
-                Utilities.recentusers.add(new RecentUserItem(null,u.getFirst_name()+' '+u.getLast_name(),"","10:00"));
-        }
-        return ""+Utilities.recentUserIds.size();
-    }
-}
 
 
 

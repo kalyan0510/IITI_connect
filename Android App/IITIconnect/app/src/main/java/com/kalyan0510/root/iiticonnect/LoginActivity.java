@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -191,6 +192,9 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),s, Toast.LENGTH_SHORT).show();
             else {
                 try{
+                    Snackbar.make(submit, s+' ', Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
+
                     SharedPreferences sp = getApplicationContext().getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putInt(Utilities.SharesPresfKeys.regid,Integer.parseInt(s));

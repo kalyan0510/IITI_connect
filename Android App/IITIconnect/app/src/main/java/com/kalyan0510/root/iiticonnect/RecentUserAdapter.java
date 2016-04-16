@@ -2,6 +2,8 @@ package com.kalyan0510.root.iiticonnect;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by root on 3/4/16.
@@ -52,7 +55,6 @@ public class RecentUserAdapter extends BaseAdapter {
             holder.time = (TextView) convertView.findViewById(R.id.recent_item_time);
             holder.str=(TextView)convertView.findViewById(R.id.recent_item_str);
 
-
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -63,34 +65,40 @@ public class RecentUserAdapter extends BaseAdapter {
         holder.time.setText(li.time);
         if(li.image!=null)
         holder.img.setImageBitmap(li.image);
+        else
+        holder.img.setImageResource(R.mipmap.userdefault);
         holder.Name.setText(li.Name);
         holder.str.setText(li.str);
-       /* if(li.getCol()==1){
-            holder.from.setBackgroundColor(Color.rgb(74,68,86));
-            holder.to.setBackgroundColor(Color.rgb(74,68,86));
-            holder.time.setBackgroundColor(Color.rgb(74,68,86));
-            holder.bus.setBackgroundColor(Color.rgb(74,68,86));
-        }
-        else {
-        }*/
-        /*int x=li.getCol();
-        if(x!=0)
-            ((LinearLayout)convertView.findViewById(R.id.busitem)).setBackgroundColor(Color.rgb(200-5*x,200-5*x,200-5*x));
-        else
-            ((LinearLayout)convertView.findViewById(R.id.busitem)).setBackgroundColor(Color.rgb(240,240,240));
-        //convertView.notifyAll();
-        ((LinearLayout)convertView.findViewById(R.id.busitem)).setOnClickListener(new View.OnClickListener() {
+        convertView.findViewById(R.id.linear).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage(li.getUsers())
-                        .setTitle("Users")
-                        .setPositiveButton(android.R.string.ok, null);
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                Intent intent = new Intent(context, ChatActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //Toast.makeText(context, intlist[Arrays.asList(strlist).indexOf(name)]+"" + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+                Bundle bundle = new Bundle();
+                bundle.putString("Name", li.Name);
+                bundle.putInt("reg_id", li.id);
+                intent.putExtras(bundle);
+
+                context.startActivity(intent);
             }
         });
-        */
+        convertView.findViewById(R.id.recent_item_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, OthersProfileActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //Toast.makeText(context, intlist[Arrays.asList(strlist).indexOf(name)]+"" + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+                Bundle bundle = new Bundle();
+                bundle.putString("Name", li.Name);
+                bundle.putInt("reg_id", li.id);
+                intent.putExtras(bundle);
+
+                context.startActivity(intent);
+            }
+        });
+
+
         return convertView;
     }
 

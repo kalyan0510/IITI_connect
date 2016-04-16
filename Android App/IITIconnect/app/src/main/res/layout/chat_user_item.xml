@@ -8,13 +8,14 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/linear"
         android:weightSum="1">
 
-        <ImageView
+        <com.kalyan0510.root.iiticonnect.RoundedImageView
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:id="@+id/recent_item_image"
-            android:src="#85fdef" />
+             />
 
         <LinearLayout
             android:orientation="vertical"
