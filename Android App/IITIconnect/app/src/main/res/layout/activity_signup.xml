@@ -55,20 +55,37 @@
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/mailTv" />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="I agree to terms and conditions"
-        android:id="@+id/tc"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:id="@+id/xxx"
         android:layout_below="@+id/mailTv"
-        android:checked="false" />
+        android:layout_height="wrap_content">
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I agree to "
+            android:id="@+id/tc"
+            android:checked="false"
+            android:textSize="15sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/tnc"
+            android:id="@+id/tnc"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tc"
+            android:layout_toEndOf="@+id/tc"
+            android:textColor="#1896de" />
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="submit"
         android:id="@+id/submit"
-        android:layout_below="@+id/tc"
+        android:layout_below="@+id/xxx"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -80,5 +97,7 @@
         android:id="@+id/textView7"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+
 
 </RelativeLayout>

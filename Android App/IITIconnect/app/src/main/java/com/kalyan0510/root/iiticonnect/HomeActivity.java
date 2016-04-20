@@ -4,9 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -57,11 +59,28 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class HomeActivity extends AppCompatActivity {
+    static boolean active = false;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        active = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        active = false;
+    }
+
+
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -103,17 +122,45 @@ public class HomeActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(2);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });
 
 
     }
+    private void CopyAssets() {
 
+        AssetManager assetManager = getAssets();
+
+        InputStream in = null;
+        OutputStream out = null;
+        File file = new File(getFilesDir(), "UM.pdf");
+        try {
+            in = assetManager.open("UM.pdf");
+            out = openFileOutput(file.getName(), Context.MODE_WORLD_READABLE);
+
+            copyFile(in, out);
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+        } catch (Exception e) {
+            Log.e("tag", e.getMessage());
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(
+                Uri.parse("file://" + getFilesDir() + "/UM.pdf"),
+                "application/pdf");
+
+        startActivity(intent);
+    }
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -140,6 +187,9 @@ public class HomeActivity extends AppCompatActivity {
         else if(id==R.id.action_profile){
             startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
             return false;
+        }
+        else  if(id==R.id.um){
+            CopyAssets();
         }
 
         return super.onOptionsItemSelected(item);
@@ -433,7 +483,7 @@ public class HomeActivity extends AppCompatActivity {
                     bundle.putString("Name", name);
                     bundle.putInt("reg_id", intlist[Arrays.asList(strlist).indexOf(name)]);
                     intent.putExtras(bundle);
-
+                    atv.setText("");
                     startActivity(intent);
                 }
             });
@@ -456,6 +506,7 @@ public class HomeActivity extends AppCompatActivity {
 
                         @Override
                         public void run() {
+                            if(active)
                             new AddusertoRecentListview().execute();
                         }
                     }.run();
@@ -538,8 +589,10 @@ public class HomeActivity extends AppCompatActivity {
         }
         public class AddusertoRecentListview extends AsyncTask<String,String,String>{
             String res_error;
+
             @Override
-            protected String doInBackground(String... params) {
+            protected void onPreExecute() {
+                super.onPreExecute();
                 User u=null;
                 Recents rc = Utilities.getrecents(context);
                 int i;
@@ -554,7 +607,7 @@ public class HomeActivity extends AppCompatActivity {
                         u = new Gson().fromJson(s, User.class);
 
                     }else
-                   res_error+="User NOt Available offline";
+                        res_error+="User NOt Available offline";
                     String lmsg = getlastmes(i);
                     //Log.w("msg",lmsg);
                     Message mg = new Gson().fromJson(lmsg,Message.class);
@@ -564,14 +617,18 @@ public class HomeActivity extends AppCompatActivity {
                         recent_user_list.add(new RecentUserItem(bitmap, mg.from_name, mg.message, mg.time,mg.from));
                     }else {
                         if(u==null)
-                        res_error+="User NULL";
+                            res_error+="User NULL";
                         else
                             res_error+="User Pic Null";
                         recent_user_list.add(new RecentUserItem(null, "" + mg.from_name, mg.message, mg.time,mg.from));
                         //Log.w("see here",  u.getFirst_name()+" "+u.getLast_name());
                     }
                 }
-                return res_error;
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                return "";
             }
 
             @Override

@@ -44,6 +44,12 @@ public class FeedServiceProxy implements webService.FeedService {
     return feedService;
   }
   
+  public java.lang.String getWarning() throws java.rmi.RemoteException{
+    if (feedService == null)
+      _initFeedServiceProxy();
+    return feedService.getWarning();
+  }
+  
   public boolean setAddress(java.lang.String address, java.lang.String mac, int reg_id) throws java.rmi.RemoteException{
     if (feedService == null)
       _initFeedServiceProxy();
@@ -56,10 +62,22 @@ public class FeedServiceProxy implements webService.FeedService {
     return feedService.login(username, password);
   }
   
-  public java.lang.String getWarning() throws java.rmi.RemoteException{
+  public java.lang.String signup(java.lang.String username, java.lang.String first_name, java.lang.String last_name, java.lang.String mail) throws java.rmi.RemoteException{
     if (feedService == null)
       _initFeedServiceProxy();
-    return feedService.getWarning();
+    return feedService.signup(username, first_name, last_name, mail);
+  }
+  
+  public java.lang.String setWarning(int reg_id, java.lang.String message, java.lang.String type) throws java.rmi.RemoteException{
+    if (feedService == null)
+      _initFeedServiceProxy();
+    return feedService.setWarning(reg_id, message, type);
+  }
+  
+  public int loadusers() throws java.rmi.RemoteException{
+    if (feedService == null)
+      _initFeedServiceProxy();
+    return feedService.loadusers();
   }
   
   public java.lang.String forgotpassword(java.lang.String entity, java.lang.String value) throws java.rmi.RemoteException{
@@ -72,6 +90,30 @@ public class FeedServiceProxy implements webService.FeedService {
     if (feedService == null)
       _initFeedServiceProxy();
     return feedService.changepassword(reg_id, oldpass, newpass);
+  }
+  
+  public boolean wasMacSet(java.lang.String mac) throws java.rmi.RemoteException{
+    if (feedService == null)
+      _initFeedServiceProxy();
+    return feedService.wasMacSet(mac);
+  }
+  
+  public java.lang.String timenow() throws java.rmi.RemoteException{
+    if (feedService == null)
+      _initFeedServiceProxy();
+    return feedService.timenow();
+  }
+  
+  public java.lang.String getusersforsearch() throws java.rmi.RemoteException{
+    if (feedService == null)
+      _initFeedServiceProxy();
+    return feedService.getusersforsearch();
+  }
+  
+  public int putmessage(int regfrom, java.lang.String name, java.lang.String au, int regto, java.lang.String str, java.lang.String img) throws java.rmi.RemoteException{
+    if (feedService == null)
+      _initFeedServiceProxy();
+    return feedService.putmessage(regfrom, name, au, regto, str, img);
   }
   
   public boolean changedp(int reg_id, java.lang.String x, java.lang.String y) throws java.rmi.RemoteException{
@@ -96,12 +138,6 @@ public class FeedServiceProxy implements webService.FeedService {
     if (feedService == null)
       _initFeedServiceProxy();
     return feedService.getuser(reg_id);
-  }
-  
-  public java.lang.String setWarning(int reg_id, java.lang.String message, java.lang.String type) throws java.rmi.RemoteException{
-    if (feedService == null)
-      _initFeedServiceProxy();
-    return feedService.setWarning(reg_id, message, type);
   }
   
   public java.lang.String isWarnignGenerated() throws java.rmi.RemoteException{
@@ -144,42 +180,6 @@ public class FeedServiceProxy implements webService.FeedService {
     if (feedService == null)
       _initFeedServiceProxy();
     feedService.clearSOS();
-  }
-  
-  public boolean wasMacSet(java.lang.String mac) throws java.rmi.RemoteException{
-    if (feedService == null)
-      _initFeedServiceProxy();
-    return feedService.wasMacSet(mac);
-  }
-  
-  public java.lang.String timenow() throws java.rmi.RemoteException{
-    if (feedService == null)
-      _initFeedServiceProxy();
-    return feedService.timenow();
-  }
-  
-  public int loadusers() throws java.rmi.RemoteException{
-    if (feedService == null)
-      _initFeedServiceProxy();
-    return feedService.loadusers();
-  }
-  
-  public java.lang.String getusersforsearch() throws java.rmi.RemoteException{
-    if (feedService == null)
-      _initFeedServiceProxy();
-    return feedService.getusersforsearch();
-  }
-  
-  public int putmessage(int regfrom, java.lang.String name, java.lang.String au, int regto, java.lang.String str, java.lang.String img) throws java.rmi.RemoteException{
-    if (feedService == null)
-      _initFeedServiceProxy();
-    return feedService.putmessage(regfrom, name, au, regto, str, img);
-  }
-  
-  public java.lang.String signup(java.lang.String username, java.lang.String first_name, java.lang.String last_name, java.lang.String mail) throws java.rmi.RemoteException{
-    if (feedService == null)
-      _initFeedServiceProxy();
-    return feedService.signup(username, first_name, last_name, mail);
   }
   
   public java.lang.String getAddress(java.lang.String mac) throws java.rmi.RemoteException{

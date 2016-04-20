@@ -10,6 +10,8 @@
       <parameter name="className" value="webService.FeedService"/>
       <parameter name="wsdlPortType" value="FeedService"/>
       <parameter name="typeMappingVersion" value="1.2"/>
+      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getWarning" qname="operNS:getWarning" returnQName="retNS:getWarningReturn" returnType="rtns:string" soapAction="">
+      </operation>
       <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="setAddress" qname="operNS:setAddress" returnQName="retNS:setAddressReturn" returnType="rtns:boolean" soapAction="">
         <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:address" type="tns:string"/>
         <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:mac" type="tns:string"/>
@@ -19,7 +21,18 @@
         <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:username" type="tns:string"/>
         <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:password" type="tns:string"/>
       </operation>
-      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getWarning" qname="operNS:getWarning" returnQName="retNS:getWarningReturn" returnType="rtns:string" soapAction="">
+      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="signup" qname="operNS:signup" returnQName="retNS:signupReturn" returnType="rtns:string" soapAction="">
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:username" type="tns:string"/>
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:first_name" type="tns:string"/>
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:last_name" type="tns:string"/>
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:mail" type="tns:string"/>
+      </operation>
+      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="setWarning" qname="operNS:setWarning" returnQName="retNS:setWarningReturn" returnType="rtns:string" soapAction="">
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:Reg_id" type="tns:int"/>
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:message" type="tns:string"/>
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:type" type="tns:string"/>
+      </operation>
+      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="loadusers" qname="operNS:loadusers" returnQName="retNS:loadusersReturn" returnType="rtns:int" soapAction="">
       </operation>
       <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="forgotpassword" qname="operNS:forgotpassword" returnQName="retNS:forgotpasswordReturn" returnType="rtns:string" soapAction="">
         <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:entity" type="tns:string"/>
@@ -29,6 +42,21 @@
         <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:Reg_id" type="tns:int"/>
         <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:oldpass" type="tns:string"/>
         <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:newpass" type="tns:string"/>
+      </operation>
+      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="wasMacSet" qname="operNS:wasMacSet" returnQName="retNS:wasMacSetReturn" returnType="rtns:boolean" soapAction="">
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:mac" type="tns:string"/>
+      </operation>
+      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="timenow" qname="operNS:timenow" returnQName="retNS:timenowReturn" returnType="rtns:string" soapAction="">
+      </operation>
+      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getusersforsearch" qname="operNS:getusersforsearch" returnQName="retNS:getusersforsearchReturn" returnType="rtns:string" soapAction="">
+      </operation>
+      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="putmessage" qname="operNS:putmessage" returnQName="retNS:putmessageReturn" returnType="rtns:int" soapAction="">
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:regfrom" type="tns:int"/>
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:name" type="tns:string"/>
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:au" type="tns:string"/>
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:regto" type="tns:int"/>
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:str" type="tns:string"/>
+        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:img" type="tns:string"/>
       </operation>
       <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="changedp" qname="operNS:changedp" returnQName="retNS:changedpReturn" returnType="rtns:boolean" soapAction="">
         <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:Reg_id" type="tns:int"/>
@@ -43,11 +71,6 @@
       </operation>
       <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getuser" qname="operNS:getuser" returnQName="retNS:getuserReturn" returnType="rtns:string" soapAction="">
         <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:Reg_id" type="tns:int"/>
-      </operation>
-      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="setWarning" qname="operNS:setWarning" returnQName="retNS:setWarningReturn" returnType="rtns:string" soapAction="">
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:Reg_id" type="tns:int"/>
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:message" type="tns:string"/>
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:type" type="tns:string"/>
       </operation>
       <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="isWarnignGenerated" qname="operNS:isWarnignGenerated" returnQName="retNS:isWarnignGeneratedReturn" returnType="rtns:string" soapAction="">
       </operation>
@@ -67,29 +90,6 @@
       <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="isSOSGenerated" qname="operNS:isSOSGenerated" returnQName="retNS:isSOSGeneratedReturn" returnType="rtns:string" soapAction="">
       </operation>
       <operation xmlns:operNS="http://webService" name="clearSOS" qname="operNS:clearSOS" soapAction="">
-      </operation>
-      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="wasMacSet" qname="operNS:wasMacSet" returnQName="retNS:wasMacSetReturn" returnType="rtns:boolean" soapAction="">
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:mac" type="tns:string"/>
-      </operation>
-      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="timenow" qname="operNS:timenow" returnQName="retNS:timenowReturn" returnType="rtns:string" soapAction="">
-      </operation>
-      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="loadusers" qname="operNS:loadusers" returnQName="retNS:loadusersReturn" returnType="rtns:int" soapAction="">
-      </operation>
-      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getusersforsearch" qname="operNS:getusersforsearch" returnQName="retNS:getusersforsearchReturn" returnType="rtns:string" soapAction="">
-      </operation>
-      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="putmessage" qname="operNS:putmessage" returnQName="retNS:putmessageReturn" returnType="rtns:int" soapAction="">
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:regfrom" type="tns:int"/>
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:name" type="tns:string"/>
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:au" type="tns:string"/>
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:regto" type="tns:int"/>
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:str" type="tns:string"/>
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:img" type="tns:string"/>
-      </operation>
-      <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="signup" qname="operNS:signup" returnQName="retNS:signupReturn" returnType="rtns:string" soapAction="">
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:username" type="tns:string"/>
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:first_name" type="tns:string"/>
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:last_name" type="tns:string"/>
-        <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:mail" type="tns:string"/>
       </operation>
       <operation xmlns:operNS="http://webService" xmlns:retNS="http://webService" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getAddress" qname="operNS:getAddress" returnQName="retNS:getAddressReturn" returnType="rtns:string" soapAction="">
         <parameter xmlns:pns="http://webService" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:mac" type="tns:string"/>

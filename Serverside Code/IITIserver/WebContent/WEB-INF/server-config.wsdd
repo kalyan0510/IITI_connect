@@ -7,8 +7,8 @@
   <ns1:parameter name="dotNetSoapEncFix" value="true"/>
   <ns1:parameter name="enableNamespacePrefixOptimization" value="false"/>
   <ns1:parameter name="sendXMLDeclaration" value="true"/>
-  <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
   <ns1:parameter name="sendXsiTypes" value="true"/>
+  <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
   <ns1:requestFlow>
    <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
     <ns1:parameter name="scope" value="session"/>
@@ -29,78 +29,78 @@
   <ns1:namespace>http://xml.apache.org/axis/wsdd/</ns1:namespace>
  </ns1:service>
  <ns1:service name="FeedService" provider="java:RPC" style="wrapped" use="literal">
-  <ns2:operation name="setAddress" qname="ns1:setAddress" returnQName="ns1:setAddressReturn" returnType="xsd:boolean" soapAction="" xmlns:ns1="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://xml.apache.org/axis/wsdd/">
-   <ns2:parameter qname="ns1:address" type="xsd:string"/>
-   <ns2:parameter qname="ns1:mac" type="xsd:string"/>
-   <ns2:parameter qname="ns1:reg_id" type="xsd:int"/>
-  </ns2:operation>
-  <ns1:operation name="login" qname="ns2:login" returnQName="ns2:loginReturn" returnType="xsd:string" soapAction="" xmlns:ns2="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns2:username" type="xsd:string"/>
-   <ns1:parameter qname="ns2:password" type="xsd:string"/>
+  <ns2:operation name="getWarning" qname="ns1:getWarning" returnQName="ns1:getWarningReturn" returnType="xsd:string" soapAction="" xmlns:ns1="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://xml.apache.org/axis/wsdd/"/>
+  <ns1:operation name="setAddress" qname="ns2:setAddress" returnQName="ns2:setAddressReturn" returnType="xsd:boolean" soapAction="" xmlns:ns2="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns2:address" type="xsd:string"/>
+   <ns1:parameter qname="ns2:mac" type="xsd:string"/>
+   <ns1:parameter qname="ns2:reg_id" type="xsd:int"/>
   </ns1:operation>
-  <ns1:operation name="getWarning" qname="ns3:getWarning" returnQName="ns3:getWarningReturn" returnType="xsd:string" soapAction="" xmlns:ns3="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-  <ns1:operation name="forgotpassword" qname="ns4:forgotpassword" returnQName="ns4:forgotpasswordReturn" returnType="xsd:string" soapAction="" xmlns:ns4="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns4:entity" type="xsd:string"/>
-   <ns1:parameter qname="ns4:value" type="xsd:string"/>
+  <ns1:operation name="login" qname="ns3:login" returnQName="ns3:loginReturn" returnType="xsd:string" soapAction="" xmlns:ns3="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns3:username" type="xsd:string"/>
+   <ns1:parameter qname="ns3:password" type="xsd:string"/>
   </ns1:operation>
-  <ns1:operation name="changepassword" qname="ns5:changepassword" returnQName="ns5:changepasswordReturn" returnType="xsd:string" soapAction="" xmlns:ns5="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ns1:operation name="signup" qname="ns4:signup" returnQName="ns4:signupReturn" returnType="xsd:string" soapAction="" xmlns:ns4="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns4:username" type="xsd:string"/>
+   <ns1:parameter qname="ns4:first_name" type="xsd:string"/>
+   <ns1:parameter qname="ns4:last_name" type="xsd:string"/>
+   <ns1:parameter qname="ns4:mail" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:operation name="setWarning" qname="ns5:setWarning" returnQName="ns5:setWarningReturn" returnType="xsd:string" soapAction="" xmlns:ns5="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
    <ns1:parameter qname="ns5:Reg_id" type="xsd:int"/>
-   <ns1:parameter qname="ns5:oldpass" type="xsd:string"/>
-   <ns1:parameter qname="ns5:newpass" type="xsd:string"/>
+   <ns1:parameter qname="ns5:message" type="xsd:string"/>
+   <ns1:parameter qname="ns5:type" type="xsd:string"/>
   </ns1:operation>
-  <ns1:operation name="changedp" qname="ns6:changedp" returnQName="ns6:changedpReturn" returnType="xsd:boolean" soapAction="" xmlns:ns6="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns6:Reg_id" type="xsd:int"/>
-   <ns1:parameter qname="ns6:x" type="xsd:string"/>
-   <ns1:parameter qname="ns6:y" type="xsd:string"/>
+  <ns1:operation name="loadusers" qname="ns6:loadusers" returnQName="ns6:loadusersReturn" returnType="xsd:int" soapAction="" xmlns:ns6="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  <ns1:operation name="forgotpassword" qname="ns7:forgotpassword" returnQName="ns7:forgotpasswordReturn" returnType="xsd:string" soapAction="" xmlns:ns7="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns7:entity" type="xsd:string"/>
+   <ns1:parameter qname="ns7:value" type="xsd:string"/>
   </ns1:operation>
-  <ns1:operation name="getdp" qname="ns7:getdp" returnQName="ns7:getdpReturn" returnType="xsd:string" soapAction="" xmlns:ns7="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns7:Reg_id" type="xsd:int"/>
-  </ns1:operation>
-  <ns1:operation name="geticon" qname="ns8:geticon" returnQName="ns8:geticonReturn" returnType="xsd:string" soapAction="" xmlns:ns8="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ns1:operation name="changepassword" qname="ns8:changepassword" returnQName="ns8:changepasswordReturn" returnType="xsd:string" soapAction="" xmlns:ns8="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
    <ns1:parameter qname="ns8:Reg_id" type="xsd:int"/>
+   <ns1:parameter qname="ns8:oldpass" type="xsd:string"/>
+   <ns1:parameter qname="ns8:newpass" type="xsd:string"/>
   </ns1:operation>
-  <ns1:operation name="getuser" qname="ns9:getuser" returnQName="ns9:getuserReturn" returnType="xsd:string" soapAction="" xmlns:ns9="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns9:Reg_id" type="xsd:int"/>
+  <ns1:operation name="wasMacSet" qname="ns9:wasMacSet" returnQName="ns9:wasMacSetReturn" returnType="xsd:boolean" soapAction="" xmlns:ns9="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns9:mac" type="xsd:string"/>
   </ns1:operation>
-  <ns1:operation name="setWarning" qname="ns10:setWarning" returnQName="ns10:setWarningReturn" returnType="xsd:string" soapAction="" xmlns:ns10="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns10:Reg_id" type="xsd:int"/>
-   <ns1:parameter qname="ns10:message" type="xsd:string"/>
-   <ns1:parameter qname="ns10:type" type="xsd:string"/>
+  <ns1:operation name="timenow" qname="ns10:timenow" returnQName="ns10:timenowReturn" returnType="xsd:string" soapAction="" xmlns:ns10="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  <ns1:operation name="getusersforsearch" qname="ns11:getusersforsearch" returnQName="ns11:getusersforsearchReturn" returnType="xsd:string" soapAction="" xmlns:ns11="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  <ns1:operation name="putmessage" qname="ns12:putmessage" returnQName="ns12:putmessageReturn" returnType="xsd:int" soapAction="" xmlns:ns12="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns12:regfrom" type="xsd:int"/>
+   <ns1:parameter qname="ns12:name" type="xsd:string"/>
+   <ns1:parameter qname="ns12:au" type="xsd:string"/>
+   <ns1:parameter qname="ns12:regto" type="xsd:int"/>
+   <ns1:parameter qname="ns12:str" type="xsd:string"/>
+   <ns1:parameter qname="ns12:img" type="xsd:string"/>
   </ns1:operation>
-  <ns1:operation name="isWarnignGenerated" qname="ns11:isWarnignGenerated" returnQName="ns11:isWarnignGeneratedReturn" returnType="xsd:string" soapAction="" xmlns:ns11="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-  <ns1:operation name="changeStatus" qname="ns12:changeStatus" returnQName="ns12:changeStatusReturn" returnType="xsd:string" soapAction="" xmlns:ns12="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns12:reg_id" type="xsd:int"/>
-   <ns1:parameter qname="ns12:status" type="xsd:string"/>
+  <ns1:operation name="changedp" qname="ns13:changedp" returnQName="ns13:changedpReturn" returnType="xsd:boolean" soapAction="" xmlns:ns13="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns13:Reg_id" type="xsd:int"/>
+   <ns1:parameter qname="ns13:x" type="xsd:string"/>
+   <ns1:parameter qname="ns13:y" type="xsd:string"/>
   </ns1:operation>
-  <ns1:operation name="clearWarning" qname="ns13:clearWarning" soapAction="" xmlns:ns13="http://webService"/>
-  <ns1:operation name="setSOS" qname="ns14:setSOS" returnQName="ns14:setSOSReturn" returnType="xsd:string" soapAction="" xmlns:ns14="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ns1:operation name="getdp" qname="ns14:getdp" returnQName="ns14:getdpReturn" returnType="xsd:string" soapAction="" xmlns:ns14="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
    <ns1:parameter qname="ns14:Reg_id" type="xsd:int"/>
-   <ns1:parameter qname="ns14:message" type="xsd:string"/>
-   <ns1:parameter qname="ns14:type" type="xsd:string"/>
   </ns1:operation>
-  <ns1:operation name="getSOS" qname="ns15:getSOS" returnQName="ns15:getSOSReturn" returnType="xsd:string" soapAction="" xmlns:ns15="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-  <ns1:operation name="isSOSGenerated" qname="ns16:isSOSGenerated" returnQName="ns16:isSOSGeneratedReturn" returnType="xsd:string" soapAction="" xmlns:ns16="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-  <ns1:operation name="clearSOS" qname="ns17:clearSOS" soapAction="" xmlns:ns17="http://webService"/>
-  <ns1:operation name="wasMacSet" qname="ns18:wasMacSet" returnQName="ns18:wasMacSetReturn" returnType="xsd:boolean" soapAction="" xmlns:ns18="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns18:mac" type="xsd:string"/>
+  <ns1:operation name="geticon" qname="ns15:geticon" returnQName="ns15:geticonReturn" returnType="xsd:string" soapAction="" xmlns:ns15="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns15:Reg_id" type="xsd:int"/>
   </ns1:operation>
-  <ns1:operation name="timenow" qname="ns19:timenow" returnQName="ns19:timenowReturn" returnType="xsd:string" soapAction="" xmlns:ns19="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-  <ns1:operation name="loadusers" qname="ns20:loadusers" returnQName="ns20:loadusersReturn" returnType="xsd:int" soapAction="" xmlns:ns20="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-  <ns1:operation name="getusersforsearch" qname="ns21:getusersforsearch" returnQName="ns21:getusersforsearchReturn" returnType="xsd:string" soapAction="" xmlns:ns21="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-  <ns1:operation name="putmessage" qname="ns22:putmessage" returnQName="ns22:putmessageReturn" returnType="xsd:int" soapAction="" xmlns:ns22="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns22:regfrom" type="xsd:int"/>
-   <ns1:parameter qname="ns22:name" type="xsd:string"/>
-   <ns1:parameter qname="ns22:au" type="xsd:string"/>
-   <ns1:parameter qname="ns22:regto" type="xsd:int"/>
-   <ns1:parameter qname="ns22:str" type="xsd:string"/>
-   <ns1:parameter qname="ns22:img" type="xsd:string"/>
+  <ns1:operation name="getuser" qname="ns16:getuser" returnQName="ns16:getuserReturn" returnType="xsd:string" soapAction="" xmlns:ns16="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns16:Reg_id" type="xsd:int"/>
   </ns1:operation>
-  <ns1:operation name="signup" qname="ns23:signup" returnQName="ns23:signupReturn" returnType="xsd:string" soapAction="" xmlns:ns23="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns23:username" type="xsd:string"/>
-   <ns1:parameter qname="ns23:first_name" type="xsd:string"/>
-   <ns1:parameter qname="ns23:last_name" type="xsd:string"/>
-   <ns1:parameter qname="ns23:mail" type="xsd:string"/>
+  <ns1:operation name="isWarnignGenerated" qname="ns17:isWarnignGenerated" returnQName="ns17:isWarnignGeneratedReturn" returnType="xsd:string" soapAction="" xmlns:ns17="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  <ns1:operation name="changeStatus" qname="ns18:changeStatus" returnQName="ns18:changeStatusReturn" returnType="xsd:string" soapAction="" xmlns:ns18="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns18:reg_id" type="xsd:int"/>
+   <ns1:parameter qname="ns18:status" type="xsd:string"/>
   </ns1:operation>
+  <ns1:operation name="clearWarning" qname="ns19:clearWarning" soapAction="" xmlns:ns19="http://webService"/>
+  <ns1:operation name="setSOS" qname="ns20:setSOS" returnQName="ns20:setSOSReturn" returnType="xsd:string" soapAction="" xmlns:ns20="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns20:Reg_id" type="xsd:int"/>
+   <ns1:parameter qname="ns20:message" type="xsd:string"/>
+   <ns1:parameter qname="ns20:type" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:operation name="getSOS" qname="ns21:getSOS" returnQName="ns21:getSOSReturn" returnType="xsd:string" soapAction="" xmlns:ns21="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  <ns1:operation name="isSOSGenerated" qname="ns22:isSOSGenerated" returnQName="ns22:isSOSGeneratedReturn" returnType="xsd:string" soapAction="" xmlns:ns22="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  <ns1:operation name="clearSOS" qname="ns23:clearSOS" soapAction="" xmlns:ns23="http://webService"/>
   <ns1:operation name="getAddress" qname="ns24:getAddress" returnQName="ns24:getAddressReturn" returnType="xsd:string" soapAction="" xmlns:ns24="http://webService" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
    <ns1:parameter qname="ns24:mac" type="xsd:string"/>
   </ns1:operation>
@@ -108,16 +108,14 @@
    <ns1:parameter qname="ns25:reg" type="xsd:int"/>
    <ns1:parameter qname="ns25:authentic" type="xsd:string"/>
   </ns1:operation>
-  <ns1:parameter name="sendMultiRefs" value="false"/>
+  <ns1:parameter name="allowedMethods" value="geticon putmessage timenow isWarnignGenerated login forgotpassword clearSOS clearWarning setSOS isSOSGenerated getAddress changedp setWarning changepassword getusersforsearch setAddress wasMacSet getSOS getMessage loadusers signup getWarning getuser getdp changeStatus"/>
+  <ns1:parameter name="typeMappingVersion" value="1.2"/>
+  <ns1:parameter name="wsdlPortType" value="FeedService"/>
+  <ns1:parameter name="className" value="webService.FeedService"/>
   <ns1:parameter name="wsdlServicePort" value="FeedService"/>
   <ns1:parameter name="schemaQualified" value="http://webService"/>
-  <ns1:parameter name="className" value="webService.FeedService"/>
-  <ns1:parameter name="typeMappingVersion" value="1.2"/>
-  <ns1:parameter name="allowedMethods" value="geticon putmessage timenow isWarnignGenerated login forgotpassword clearSOS clearWarning setSOS isSOSGenerated getAddress changedp setWarning changepassword getusersforsearch setAddress wasMacSet getSOS getMessage loadusers signup getWarning getuser getdp changeStatus"/>
-  <ns1:parameter name="wsdlServiceElement" value="FeedServiceService"/>
   <ns1:parameter name="wsdlTargetNamespace" value="http://webService"/>
-  <ns1:parameter name="wsdlPortType" value="FeedService"/>
-  <ns1:parameter name="sendXsiTypes" value="false"/>
+  <ns1:parameter name="wsdlServiceElement" value="FeedServiceService"/>
  </ns1:service>
  <ns1:service name="Version" provider="java:RPC">
   <ns1:parameter name="allowedMethods" value="getVersion"/>

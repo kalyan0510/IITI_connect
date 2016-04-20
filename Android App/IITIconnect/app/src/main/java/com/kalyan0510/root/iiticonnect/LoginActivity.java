@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
@@ -140,6 +142,9 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if(s.equals("Success"))
+                Snackbar.make(submit,"a mail was sent to your registered mail id\n" +
+                        "please check it" , Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
             det.setText("a mail was sent to your registered mail id\n" +
                     "please check it");
         }
@@ -197,10 +202,10 @@ public class LoginActivity extends AppCompatActivity {
 
                     SharedPreferences sp = getApplicationContext().getSharedPreferences(Utilities.SharesPresfKeys.key, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putInt(Utilities.SharesPresfKeys.regid,Integer.parseInt(s));
+                    editor.putInt(Utilities.SharesPresfKeys.regid, Integer.parseInt(s));
                     editor.putString(Utilities.SharesPresfKeys.auth, passwd);
                     editor.commit();
-
+                    new getusertask().execute(Integer.parseInt(s));//tanmay ka paa 82433448
 
                     Context c = getApplicationContext();
                     Calendar cal = Calendar.getInstance();
@@ -223,6 +228,7 @@ public class LoginActivity extends AppCompatActivity {
                                 cal.getTimeInMillis(), pendingIntentm);
                     }
                     startActivity(new Intent(getApplicationContext(),HomeActivity.class));
+                    finish();
                 }
 
                 catch(Exception e){
@@ -232,4 +238,51 @@ public class LoginActivity extends AppCompatActivity {
 
         }
     }
+
+    class getusertask extends AsyncTask<Integer, String,String>{
+        String result="*";
+        protected String doInBackground(Integer... params) {
+            try {
+                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                SoapObject request = new SoapObject(Utilities.connection.NAMESPACE,"getuser");
+                request.addProperty("Reg_id", params[0]);
+                envelope.bodyOut = request;
+                HttpTransportSE transport = new HttpTransportSE(Utilities.connection.url+Utilities.connection.x+Utilities.connection.exs);
+                try {
+                    transport.call(Utilities.connection.NAMESPACE + Utilities.connection.SOAP_PREFIX +"getuser", envelope);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "*";
+                } catch (XmlPullParserException e) {
+                    e.printStackTrace();
+                    return "*";
+                }
+                result=envelope.getResponse().toString();
+                if (envelope.bodyIn != null) {
+                    SoapPrimitive resultSOAP = (SoapPrimitive) ((SoapObject) envelope.bodyIn).getProperty(0);
+                    result=resultSOAP.toString();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = "*";
+            }
+            return result;
+        }
+
+
+        @Override
+        protected void onPostExecute(String  s) {
+            if(s.equals("*"))
+                return;
+            User u = new Gson().fromJson(s,User.class);
+            //Utilities.currentUser= u;
+
+            SharedPreferences sp =getSharedPreferences(Utilities.SharesPresfKeys.key,Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString(Utilities.SharesPresfKeys.user, new Gson().toJson(u));
+            editor.putString("full_name",u.getFirst_name()+" "+u.getLast_name());
+            editor.commit();
+        }
+    }
+
 }

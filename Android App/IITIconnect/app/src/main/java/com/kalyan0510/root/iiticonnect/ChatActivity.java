@@ -56,10 +56,59 @@ public class ChatActivity extends ListActivity {
     TextView statView;
     RoundedImageView rv;
     BroadcastReceiver receiver;
+
+    @Override
+    protected void onNewIntent(Intent it) {
+        super.onNewIntent(it);
+        Name = it.getStringExtra("Name");
+        id = it.getIntExtra("reg_id", 0);
+        adapter = new ChatAdapter();
+        Toast.makeText(ChatActivity.this, Name+" "+id, Toast.LENGTH_SHORT).show();
+        setListAdapter(adapter);
+
+        /*ArrayList<Message>  al= new ArrayList<Message>();
+        al.add(new Message(1, "m", "mess", "89:90", null, 0));
+        adapter.addItem(new MessageData(new Gson().toJson(new Messagelist(al)), "", 0));
+        adapter.addItem(new MessageData(getmes(id),"",0));
+        */String str = getmes(id);
+        str= "{\"messagelist\":["+str;
+        System.out.println(str);
+        int len=str.length()-1;
+        if(str.charAt(len)==',')
+            str = str.substring(0,len);
+        System.out.println(str);
+        str = str+"]}";
+        System.out.println(str);
+        Messagelist ml = new Gson().fromJson(str,Messagelist.class);
+        for(Message mg:ml.messagelist){
+            adapter.addItem(new MessageData(mg.message,mg.time,mg.status));
+        }
+        nameview.setText(Name);
+        try{
+            User u = new Gson().fromJson(HomeActivity.RecentChat.getusercontent(id), User.class);
+            byte[] array = Base64.decode(u.getPic().getBytes(), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(array, 0, array.length);
+            rv.setImageBitmap(bitmap);
+
+            statView.setText(u.getStatus());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        /*if (!isTaskRoot()) {
+            final Intent intent = getIntent();
+            if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && Intent.ACTION_MAIN.equals(intent.getAction())) {
+                ///Log.w(LOG_TAG, "Main Activity is not the root.  Finishing Main Activity instead of launching.");
+                finish();
+                return;
+            }
+        }*/
         setContentView(R.layout.activity_chat);
         rv=(RoundedImageView)findViewById(R.id.usericon);
         rv.setScaleType(ImageView.ScaleType.FIT_XY);

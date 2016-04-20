@@ -44,7 +44,9 @@ public class FeedService {
 						ProjectManager.email(mail, passwd,"confirmation",username);
 					}
 				}).start();
+				loadusers();
 				return x;
+		
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

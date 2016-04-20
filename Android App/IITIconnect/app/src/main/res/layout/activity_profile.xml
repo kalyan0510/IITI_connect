@@ -79,12 +79,12 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:layout_marginTop="62dp"
-        android:layout_below="@+id/horizontalScrollView"
-        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:shadowRadius="23"
         android:text="change password"
-        android:id="@+id/changepass" />
+        android:id="@+id/changepass"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
     <HorizontalScrollView
         android:layout_width="match_parent"

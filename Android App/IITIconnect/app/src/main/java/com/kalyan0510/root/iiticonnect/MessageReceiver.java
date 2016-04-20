@@ -28,6 +28,7 @@ import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -181,13 +182,15 @@ public class MessageReceiver extends WakefulBroadcastReceiver {
         Intent i = new Intent();
         i.setAction("com.kalyan.messagereceived");
         Bundle bundle = new Bundle();
-        bundle.putInt("from_id",mg.from );
-        bundle.putString("from_name",mg.from_name);
+        bundle.putInt("from_id", mg.from);
+        bundle.putString("from_name", mg.from_name);
         bundle.putString("messg",mg.message);
-        bundle.putString("time",mg.time);
+        bundle.putString("time", mg.time);
         i.putExtras(bundle);
         contextx.sendBroadcast(i);
-        setcall(contextx, mg.time, mg.message, mg.from_name, (int) (Math.random() * 100));
+
+
+        setcall(contextx, mg.time, mg.message, mg.from_name, mg.from);
     }
     int putLastMessagetofile(Message mg){
         putnotify(mg);
@@ -231,14 +234,29 @@ public class MessageReceiver extends WakefulBroadcastReceiver {
             //Toast.makeText(context, "not connected to CAMPUS WIFI", Toast.LENGTH_SHORT).show();
             return;
         }
+        Toast.makeText(contextx, " "+user+" "+id, Toast.LENGTH_SHORT).show();
+        Intent intentt = new Intent(contextx, HomeActivity.class);
+        PendingIntent contentIntentx = PendingIntent.getActivity(contextx, 0, intentt, 0);
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c)
-                .setSmallIcon(R.mipmap.notify)
-                .setContentTitle("Message from "+user)
+                .setSmallIcon(R.mipmap.trollhe)
+                .setContentTitle("Message from " + user)
                 .setAutoCancel(true)
-                .setSound(defaultSoundUri);
+                .setSound(defaultSoundUri)
+                .setContentIntent(contentIntentx);
 
+        try{
+            User u = new Gson().fromJson(HomeActivity.RecentChat.getusercontent(id), User.class);
+            if(u!=null&&u.getPic()!=null&&!(u.getPic()+"").equals("")){
+                byte[] array = Base64.decode(u.getPic().getBytes(), Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(array, 0, array.length);
+                //recent_user_list.add(new RecentUserItem(bitmap, mg.from_name, mg.message, mg.time,mg.from));
+                notificationBuilder.setLargeIcon(bitmap);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
 
+        }
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         notificationBuilder.setStyle(inboxStyle);
         inboxStyle.setBigContentTitle(" "+user);
@@ -292,7 +310,7 @@ public class MessageReceiver extends WakefulBroadcastReceiver {
             super.onPostExecute(s);
             //User u  = new Gson().fromJson(s,User.class);
             //Toast.makeText(contextx, ""+s, Toast.LENGTH_SHORT).show();
-            Boolean t = Utilities.addofflineuser(contextx,id);
+            Boolean t = Utilities.addofflineuser(contextx, id);
             Toast.makeText(contextx, "addofflinee "+t, Toast.LENGTH_SHORT).show();
             Log.w("addolf",t+"");
             FileWriter f;
