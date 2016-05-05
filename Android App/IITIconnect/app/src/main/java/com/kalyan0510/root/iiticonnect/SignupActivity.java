@@ -59,8 +59,8 @@ public class SignupActivity extends AppCompatActivity {
                 }
                 String fn = firstName.getText().toString().trim();
                 String ln = lastName.getText().toString().trim();
-                String un = username.getText().toString().trim();
-                String m = mail.getText().toString().trim();
+                String un = username.getText().toString().trim().toLowerCase();
+                String m = mail.getText().toString().trim().toLowerCase();
                 if(fn.equals("")||ln.equals("")||un.equals("")||m.equals("")){
                     Toast.makeText(SignupActivity.this, "Dont leave boxes empty", Toast.LENGTH_SHORT).show();
                 }

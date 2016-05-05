@@ -42,7 +42,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Button"
+        android:text="OK"
         android:id="@+id/cpcp"
         android:layout_below="@+id/conp"
         android:layout_centerHorizontal="true" />
@@ -51,7 +51,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
         android:id="@+id/cpdet"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"

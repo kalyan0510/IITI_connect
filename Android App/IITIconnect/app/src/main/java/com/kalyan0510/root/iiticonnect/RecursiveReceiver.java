@@ -6,6 +6,7 @@ package com.kalyan0510.root.iiticonnect;
 
 import android.Manifest;
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentResolver;
@@ -254,17 +255,25 @@ public class RecursiveReceiver extends WakefulBroadcastReceiver {
             //Toast.makeText(context, "not connected to CAMPUS WIFI", Toast.LENGTH_SHORT).show();
             return;
         }
+        Intent intentt = new Intent(contextx, TestActivity.class);
+        intentt.putExtra("nam", user);
+       // Toast.makeText(contextx, "descr "+descr, Toast.LENGTH_SHORT).show();
+        intentt.putExtra("message",descr);
+        PendingIntent contentIntentx = PendingIntent.getActivity(contextx, 0, intentt, PendingIntent.FLAG_UPDATE_CURRENT);
+        //notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c)
                 .setSmallIcon(R.mipmap.notify)
-                .setContentTitle("Warning from "+user)
+                .setContentTitle("Warning: "+user)
                 .setAutoCancel(true)
-                .setSound(defaultSoundUri);
+                .setSound(defaultSoundUri)
+                .setContentIntent(contentIntentx);
 
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         notificationBuilder.setStyle(inboxStyle);
-        inboxStyle.setBigContentTitle("from "+user);
+        inboxStyle.setBigContentTitle("Warning: "+user);
         inboxStyle.addLine("type - "+type);
         inboxStyle.setSummaryText(descr);
         notificationBuilder.setStyle(inboxStyle);
@@ -295,12 +304,18 @@ public class RecursiveReceiver extends WakefulBroadcastReceiver {
             //Toast.makeText(context, "not connected to CAMPUS WIFI", Toast.LENGTH_SHORT).show();
             return;
         }
+        Intent intentt = new Intent(contextx, SOSActivity.class);
+        intentt.putExtra("nam", user);
+        // Toast.makeText(contextx, "descr "+descr, Toast.LENGTH_SHORT).show();
+        intentt.putExtra("message",abt);
+        PendingIntent contentIntentx = PendingIntent.getActivity(contextx, 0, intentt, PendingIntent.FLAG_UPDATE_CURRENT);
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c)
                 .setSmallIcon(R.mipmap.editw)
                 .setContentTitle(""+user+":help me")
                 .setAutoCancel(true)
-                .setSound(defaultSoundUri);
+                .setSound(defaultSoundUri)
+                .setContentIntent(contentIntentx);
 
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();

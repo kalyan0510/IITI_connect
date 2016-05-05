@@ -38,7 +38,7 @@ public class Utilities {
         public static final String exs="/IITIserver/services/FeedService?wsdl";
         public static final String SOAP_PREFIX = "/";
         public static  final String url= "http://";
-        public static final String x = "10.42.0.1";
+        public static final String x = "192.168.43.168";
         public class method_names{
             public static final String signup = "signup";
             public static final String login = "login";
@@ -52,8 +52,7 @@ public class Utilities {
     }
     public static boolean isOncampusWifi(Context c){
         return getwifiname(c).equals(Wifiname)||true;
-    }
-    //public static User currentUser = new User();
+    } //public static User currentUser = new User();
    // public static ArrayList<RecentUserItem> recentusers= new ArrayList<>();
     public static ArrayList<Integer> recentUserIds= new ArrayList<>();
     public static User getUser(Context ctx){

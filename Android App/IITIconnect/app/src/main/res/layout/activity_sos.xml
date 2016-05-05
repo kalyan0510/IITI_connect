@@ -6,7 +6,7 @@
     <ImageView
         android:id="@+id/header_imageview"
         android:layout_width="match_parent"
-        android:src="@mipmap/warning"
+        android:src="@mipmap/sos"
         android:layout_height="150dp"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Header  Name"
-            android:id="@+id/Warnfrom"
+            android:id="@+id/Sosfrom"
             android:textStyle="bold"
             android:textSize="17dp" />
         <LinearLayout
@@ -38,7 +38,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="0.8"
-                android:id="@+id/oopsmsg"
+                android:id="@+id/oopsmsgsos"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:gravity="center"
@@ -69,14 +69,7 @@
     </HorizontalScrollView>
 
     <!-- cheat code: negative margin -->
-    <com.kalyan0510.root.iiticonnect.RoundedImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/warn"
-        android:id="@+id/imgdp"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/informations_container"
-        android:layout_marginBottom="-56dp" />
+
 
 
 </RelativeLayout>

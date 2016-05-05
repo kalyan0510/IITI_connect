@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        
         android:allowBackup="true"
         android:icon="@mipmap/giffy"
         android:label="@string/app_name"
@@ -62,15 +61,17 @@
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".PutMessage" />
         <activity android:name=".TestActivity" />
         <activity
             android:name=".ChatActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".OthersProfileActivity"></activity>
+        <activity android:name=".OthersProfileActivity" />
+        <activity android:name=".SOSActivity"></activity>
     </application>
 
 </manifest>

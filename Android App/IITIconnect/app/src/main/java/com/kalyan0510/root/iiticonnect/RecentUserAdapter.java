@@ -64,7 +64,8 @@ public class RecentUserAdapter extends BaseAdapter {
         final RecentUserItem li = listData.get(position);
         holder.time.setText(li.time);
         if(li.image!=null)
-        holder.img.setImageBitmap(li.image);
+        holder.img.setImageBitmap
+                (li.image);
         else
         holder.img.setImageResource(R.mipmap.userdefault);
         holder.Name.setText(li.Name);
